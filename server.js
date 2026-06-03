@@ -117,10 +117,14 @@ bot.on("message", async (msg) => {
         return;
       }
 
-      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
-      await bot.sendPhoto(chatId, imageUrl);
-      return;
-    }
+      const imageUrl = `const imageUrl =
+  "https://image.pollinations.ai/prompt/" +
+  encodeURIComponent(prompt) +
+  "?width=768&height=768&nologo=true&model=flux";
+
+await bot.sendPhoto(chatId, imageUrl, {
+  caption: `🎨 ${prompt}`
+});
 
     await bot.sendChatAction(chatId, "typing");
 
