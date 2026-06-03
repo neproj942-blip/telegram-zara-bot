@@ -90,9 +90,9 @@ bot.on("message", async (msg) => {
   }
 
   const imageUrl =
-    "https://image.pollinations.ai/prompt/" +
-    encodeURIComponent(prompt) +
-    "?width=768&height=768&nologo=true&enhance=true";
+  "https://image.pollinations.ai/prompt/" +
+  encodeURIComponent(prompt) +
+  "?width=768&height=768&nologo=true&enhance=true&seed=" + Date.now();p
 
   try {
     await bot.sendPhoto(chatId, imageUrl, {
