@@ -116,17 +116,7 @@ bot.on("message", async (msg) => {
   return;
 }
 
-const imageBuffer = Buffer.from(imageResponse.data);
 
-await bot.sendPhoto(
-  chatId,
-  imageBuffer,
-  { caption: `✨ Generated Image\nPrompt: ${prompt}` },
-  { filename: "image.png", contentType: "image/png" }
-);
-
-  return;
-}
 
 
     await bot.sendChatAction(chatId, "typing");
