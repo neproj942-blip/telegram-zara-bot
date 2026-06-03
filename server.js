@@ -92,22 +92,12 @@ bot.on("message", async (msg) => {
   const imageUrl =
     "https://image.pollinations.ai/prompt/" +
     encodeURIComponent(prompt) +
-    "?width=768&height=768&nologo=true";
+    "?width=768&height=768&nologo=true&enhance=true";
 
   try {
-    const imageResponse = await axios.get(imageUrl, {
-      responseType: "arraybuffer",
-      timeout: 60000
+    await bot.sendPhoto(chatId, imageUrl, {
+      caption: `🎨 ${prompt}`
     });
-
-    const imageBuffer = Buffer.from(imageResponse.data);
-
-    await bot.sendPhoto(
-      chatId,
-      imageBuffer,
-      { caption: `🎨 ${prompt}` },
-      { filename: "image.png", contentType: "image/png" }
-    );
   } catch (imgError) {
     console.log("IMAGE_ERROR:", imgError.message);
     await bot.sendMessage(chatId, imageUrl);
