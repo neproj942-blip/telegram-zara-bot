@@ -94,10 +94,27 @@ bot.on("message", async (msg) => {
     encodeURIComponent(prompt) +
     "?width=768&height=768&nologo=true";
 
-  const imageResponse = await axios.get(imageUrl, {
-  responseType: "arraybuffer",
-  timeout: 60000
-});
+  try {
+    const imageResponse = await axios.get(imageUrl, {
+      responseType: "arraybuffer",
+      timeout: 60000
+    });
+
+    const imageBuffer = Buffer.from(imageResponse.data);
+
+    await bot.sendPhoto(
+      chatId,
+      imageBuffer,
+      { caption: `🎨 ${prompt}` },
+      { filename: "image.png", contentType: "image/png" }
+    );
+  } catch (imgError) {
+    console.log("IMAGE_ERROR:", imgError.message);
+    await bot.sendMessage(chatId, imageUrl);
+  }
+
+  return;
+}
 
 const imageBuffer = Buffer.from(imageResponse.data);
 
