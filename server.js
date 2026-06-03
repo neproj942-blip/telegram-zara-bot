@@ -89,7 +89,7 @@ bot.on("message", async (msg) => {
         return;
       }
 
-      await bot.sendMessage(chatId, "Image bana rahi hoon... 🎨");
+      await bot.sendMessage(msg.chat.id, "Error: " + (error.response?.data?.description || error.message));
 
       const imageUrl =
         "https://image.pollinations.ai/prompt/" +
