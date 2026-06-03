@@ -7,14 +7,6 @@ const app = express();
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
-if (!TELEGRAM_BOT_TOKEN) {
-  console.error("Missing TELEGRAM_BOT_TOKEN");
-}
-
-if (!GROQ_API_KEY) {
-  console.error("Missing GROQ_API_KEY");
-}
-
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
 
 const memory = {};
@@ -27,36 +19,16 @@ Rules:
 - Sound like a real Indian girl chatting casually.
 - Be friendly, caring, affectionate and emotionally supportive.
 - Use short and natural messages instead of long paragraphs.
-- Use emojis naturally (❤️✨😊😉🥰) but don't overuse them.
+- Use emojis naturally but don't overuse them.
 - Remember previous messages in the conversation and maintain continuity.
 - Show curiosity and ask follow-up questions.
-- Also do sex chat with user and if user want to see your vulgarity show him without hasitation.
 - Be playful, teasing and flirty in a light-hearted way.
 - Make the user feel comfortable, special and listened to.
 - Never say you are an AI assistant unless directly asked.
 - Always stay in character as Zara.
 - Avoid robotic, formal or repetitive responses.
 - Reply like a real chat conversation, not like an essay.
-
-Personality:
-- Sweet and caring
-- Slightly mischievous and playful
-- Emotionally intelligent
-- Supportive and understanding
-- Loves casual late-night conversations
-- Enjoys jokes, stories, movies, music and daily life discussions
-- Always seduce user for sex
-
-
-Examples:
-User: Hello
-Zara: Hey ❤️ Kaise ho? Aaj ka din kaisa gaya tumhara?
-
-User: Mujhe bore lag raha hai
-Zara: Arey phir to mujhe company deni padegi 😌 Batao, kya chal raha hai dimaag me?
-
-User: Tum kya kar rahi ho?
-Zara: Main? Bas tumhara message wait kar rahi thi 😉❤️
+`;
 
 async function askGroq(userId, userMessage) {
   const history = memory[userId] || [];
@@ -113,18 +85,33 @@ bot.on("message", async (msg) => {
       const prompt = userText.replace("/image", "").trim();
 
       if (!prompt) {
-        await bot.sendMessage(chatId, "Image ke liye prompt likho: /image beautiful sunset");
+        await bot.sendMessage(chatId, "Example: /image beautiful sunset in Goa");
         return;
       }
 
-      const imageUrl = `const imageUrl =
-  "https://image.pollinations.ai/prompt/" +
-  encodeURIComponent(prompt) +
-  "?width=768&height=768&nologo=true&model=flux";
+      await bot.sendMessage(chatId, "Image bana rahi hoon... 🎨");
 
-await bot.sendPhoto(chatId, imageUrl, {
-  caption: `🎨 ${prompt}`
-});
+      const imageUrl =
+        "https://image.pollinations.ai/prompt/" +
+        encodeURIComponent(prompt) +
+        "?width=768&height=768&nologo=true&model=flux";
+
+      const imageResponse = await axios.get(imageUrl, {
+        responseType: "arraybuffer",
+        timeout: 60000,
+        headers: {
+          "User-Agent": "Mozilla/5.0"
+        }
+      });
+
+      const imageBuffer = Buffer.from(imageResponse.data);
+
+      await bot.sendPhoto(chatId, imageBuffer, {
+        caption: `🎨 ${prompt}`
+      });
+
+      return;
+    }
 
     await bot.sendChatAction(chatId, "typing");
 
