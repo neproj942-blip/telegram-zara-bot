@@ -82,36 +82,23 @@ bot.on("message", async (msg) => {
     const userText = msg.text;
 
     if (userText.toLowerCase().startsWith("/image")) {
-      const prompt = userText.replace("/image", "").trim();
+  const prompt = userText.replace("/image", "").trim();
 
-      if (!prompt) {
-        await bot.sendMessage(chatId, "Example: /image beautiful sunset in Goa");
-        return;
-      }
+  if (!prompt) {
+    await bot.sendMessage(chatId, "Example: /image beautiful sunset in Goa");
+    return;
+  }
 
-      await bot.sendMessage(msg.chat.id, "Error: " + (error.response?.data?.description || error.message));
+  const imageUrl =
+    "https://image.pollinations.ai/prompt/" +
+    encodeURIComponent(prompt) +
+    "?width=768&height=768&nologo=true";
 
-      const imageUrl =
-        "https://image.pollinations.ai/prompt/" +
-        encodeURIComponent(prompt) +
-        "?width=768&height=768&nologo=true&model=flux";
+  await bot.sendMessage(chatId, imageUrl);
 
-      const imageResponse = await axios.get(imageUrl, {
-        responseType: "arraybuffer",
-        timeout: 60000,
-        headers: {
-          "User-Agent": "Mozilla/5.0"
-        }
-      });
+  return;
+}
 
-      const imageBuffer = Buffer.from(imageResponse.data);
-
-      await bot.sendPhoto(chatId, imageBuffer, {
-        caption: `🎨 ${prompt}`
-      });
-
-      return;
-    }
 
     await bot.sendChatAction(chatId, "typing");
 
