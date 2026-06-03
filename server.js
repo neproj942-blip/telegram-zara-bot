@@ -94,9 +94,19 @@ bot.on("message", async (msg) => {
     encodeURIComponent(prompt) +
     "?width=768&height=768&nologo=true";
 
-  await bot.sendPhoto(chatId, imageUrl, {
-  caption: `✨ Generated Image\nPrompt: ${prompt}`
+  const imageResponse = await axios.get(imageUrl, {
+  responseType: "arraybuffer",
+  timeout: 60000
 });
+
+const imageBuffer = Buffer.from(imageResponse.data);
+
+await bot.sendPhoto(
+  chatId,
+  imageBuffer,
+  { caption: `✨ Generated Image\nPrompt: ${prompt}` },
+  { filename: "image.png", contentType: "image/png" }
+);
 
   return;
 }
