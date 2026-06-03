@@ -94,7 +94,9 @@ bot.on("message", async (msg) => {
     encodeURIComponent(prompt) +
     "?width=768&height=768&nologo=true";
 
-  await bot.sendMessage(chatId, imageUrl);
+  await bot.sendPhoto(chatId, imageUrl, {
+  caption: `✨ Generated Image\nPrompt: ${prompt}`
+});
 
   return;
 }
